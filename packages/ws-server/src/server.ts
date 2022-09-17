@@ -1,4 +1,4 @@
-import { Server as HTTPServer } from "http";
+import { createServer, Server as HTTPServer } from "http";
 import { Server as HTTPSServer } from "https";
 import { Server as SocketIoServer } from "socket.io";
 import { logger } from "./logger";
@@ -15,6 +15,20 @@ export function buildIOServer(httpServer2: HTTPServer | HTTPSServer) {
   io.on("connection", onConnection);
 
   return io;
+}
+
+export function buildWithHTTPServer() {
+  const httpServer = createServer();
+  const io = buildIOServer(httpServer);
+  httpServer.listen(9978);
+
+  return {
+    teardown: () => {
+      io.disconnectSockets();
+      httpServer.close();
+      msgStore.clear();
+    },
+  };
 }
 
 function sessionManager(socket: SocketType, next: () => void) {
@@ -34,6 +48,10 @@ function onConnection(socket: SocketType) {
   }
 
   socket.join(socket.data.walletAddress);
+
+  socket.on("disconnect", () => {
+    logger.info("Client disconnected", { id: socket.data.walletAddress });
+  });
 
   onEvent(socket, msgStore);
   onAllMessagesSince(socket, msgStore);

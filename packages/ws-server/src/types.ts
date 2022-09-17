@@ -13,7 +13,12 @@ export interface ServerToClientEvents<EventPayload = any> {
 }
 
 export interface ClientToServerEvents<EventPayload = any> {
-  event: ({}: { to: string; payload: EventPayload; eventULID: string }) => void;
+  event: ({}: {
+    to: string;
+    payload: EventPayload;
+    eventULID: string;
+    acknowledged: string;
+  }) => void;
   allMessagesSince: (options: { timestamp?: number }) => void;
 }
 

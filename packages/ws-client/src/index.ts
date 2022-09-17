@@ -2,8 +2,8 @@ import { io, Socket } from "socket.io-client";
 import { ClientToServerEvents, ServerToClientEvents } from "@sww/ws-server";
 import { Auth } from "@sww/ws-server/src/types";
 
-type OnEventCallback<Payload> = (
-  event: { payload: Payload; eventULID: string },
+export type OnEventCallback<Payload> = (
+  event: { payload: Payload; eventULID: string; from: string },
   ack?: (ack: boolean) => void
 ) => void;
 
@@ -57,6 +57,7 @@ export class Client<EventPayload> {
     to: string;
     eventULID: string;
   }) {
+    //@ts-ignore
     this.io.emit("event", { eventULID, to, payload });
   }
 }

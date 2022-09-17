@@ -87,7 +87,13 @@ export class E2EESdk {
     );
 
     if (!decrypted) {
-      throw new Error("Error when decoding the payload");
+      console.error("Error when decrypting the payload", {
+        from: senderWalletAddress,
+        encrypted,
+        sharedKey,
+        repoEntries: this.e2eeRepository.getAll(),
+      });
+      throw new Error("Error when decrypting the payload");
     }
 
     return JSON.parse(naclUtils.encodeUTF8(decrypted));
@@ -125,6 +131,10 @@ type SharedKeys = {
 //TODO: This is an implementation, but is not named as such
 export class E2EERepository {
   private sharedKeys: SharedKeys = {};
+
+  getAll() {
+    return this.sharedKeys;
+  }
 
   get(recipientWalletAddress: string) {
     return this.sharedKeys[recipientWalletAddress];

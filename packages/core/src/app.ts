@@ -8,6 +8,7 @@ import { AcceptInviteUseCase } from "./invites/application/use-cases/accept-invi
 import { NewInviteUseCase } from "./invites/application/use-cases/new-invite";
 import { IOClient } from "./shared/application/ioClient";
 import { InvitesRepository } from "./invites/application/repository";
+import { ioClientSocketIO } from "./shared/infra/ioClientSocketIO";
 
 type InfraDeps = {
   baseIOClient: IOClient;
@@ -24,7 +25,7 @@ const infraDepsByType = (
     e2eeRepository: new E2EERepository(),
   },
   regular: {
-    baseIOClient: new IOClientSharedNodeProcess(walletAddress),
+    baseIOClient: new ioClientSocketIO(walletAddress),
     invitesRepository: new InvitesRepositoryInMemory(),
     e2eeRepository: new E2EERepository(),
   },

@@ -1,16 +1,34 @@
 import { buildApp } from "src/app";
+import { buildWithHTTPServer } from "@sww/ws-server";
 import { wait } from "./test-utils";
 
-describe("Invite to group", () => {
+const dependencyTypes: any[] = ["inMemory", "regular"];
+
+describe.each(dependencyTypes)("Invite to group", (dependencyType) => {
+  let server: ReturnType<typeof buildWithHTTPServer>;
+  beforeAll(() => {
+    if (dependencyType === "regular") {
+      server = buildWithHTTPServer();
+    }
+  });
+
+  afterAll(() => {
+    if (dependencyType === "regular") {
+      server.teardown();
+    }
+  });
+
   describe("as inviter", () => {
     test("creates an invite", async () => {
-      const client1 = buildApp("address1", "inMemory");
-      const client2 = buildApp("address2", "inMemory");
+      const client1 = buildApp("address1", dependencyType);
+      const client2 = buildApp("address2", dependencyType);
 
       client1.e2ee.handshakeWith("address1");
 
       client1.e2ee.handshakeWith("address2");
       client2.e2ee.handshakeWith("address1");
+
+      await wait();
 
       expect(client1.e2ee.areKeysExchangedWith("address1")).toEqual(true);
       expect(client1.e2ee.areKeysExchangedWith("address2")).toEqual(true);
@@ -21,6 +39,7 @@ describe("Invite to group", () => {
         to: { walletAddress: "address2", name: "User 2" },
         toJoinGroup: "group_id",
       });
+      await wait(700);
 
       expect(await client2.invites.listInvites()).toEqual([
         {

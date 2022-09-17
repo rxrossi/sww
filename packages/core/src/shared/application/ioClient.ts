@@ -6,7 +6,7 @@ export type IOEvent<Payload extends { type: string } = { type: string }> = {
 
 export type OnEventHandler<
   Payload extends { type: string } = { type: string }
-> = (event: IOEvent<Payload>) => void;
+> = (event: IOEvent<Payload>, ack?: (ack: boolean) => void) => void;
 
 export type IOEventRecipient = {
   walletAddress: string;
