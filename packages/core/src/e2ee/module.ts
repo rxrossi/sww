@@ -102,6 +102,10 @@ export class E2EESdk {
   private getSharedKeyWith = (recipientWalletAddress: string): Uint8Array => {
     const entry = this.e2eeRepository.get(recipientWalletAddress);
     if (!entry) {
+      console.log("Can't get shared key", {
+        recipientWalletAddress,
+        me: this.ioClient.getAddress(),
+      });
       throw new Error("Can't get shared key");
     }
 

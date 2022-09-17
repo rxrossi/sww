@@ -36,6 +36,10 @@ export class IOClientWithE2EE<Payload extends { type: string }>
     });
   }
 
+  getAddress(): string {
+    return this.baseClient.getAddress();
+  }
+
   private handleEventWithEncryptedPayload = ({
     payload,
     ...event

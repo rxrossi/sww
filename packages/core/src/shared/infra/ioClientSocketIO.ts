@@ -32,6 +32,10 @@ export class ioClientSocketIO<Payload extends { type: string }>
     this.onEventHandlers.push(eventHandler);
   }
 
+  getAddress(): string {
+    return this.walletAddress;
+  }
+
   send(
     event: Omit<IOEvent<{ type: string }>, "sentFrom">,
     recipients: IOEventRecipient[]

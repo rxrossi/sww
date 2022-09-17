@@ -18,15 +18,15 @@ describe.each(dependencyTypes)("Invite to group", (dependencyType) => {
     }
   });
 
-  describe("as inviter", () => {
-    test("creates an invite", async () => {
+  describe(`using ${dependencyType} dependency type`, () => {
+    test("invites journey", async () => {
       const client1 = buildApp("address1", dependencyType);
       const client2 = buildApp("address2", dependencyType);
 
       client1.e2ee.handshakeWith("address1");
-
       client1.e2ee.handshakeWith("address2");
       client2.e2ee.handshakeWith("address1");
+      client2.e2ee.handshakeWith("address2");
 
       await wait();
 
@@ -39,9 +39,9 @@ describe.each(dependencyTypes)("Invite to group", (dependencyType) => {
         to: { walletAddress: "address2", name: "User 2" },
         toJoinGroup: "group_id",
       });
-      await wait(700);
+      await wait();
 
-      expect(await client2.invites.listInvites()).toEqual([
+      expect(await client1.invites.listInvites()).toEqual([
         {
           //TODO: fix id
           id: "something",
@@ -51,52 +51,44 @@ describe.each(dependencyTypes)("Invite to group", (dependencyType) => {
           status: "pending",
         },
       ]);
-    });
 
-    test("invitee can accept an invite", async () => {
-      // const inviter = buildTestSDK();
-      // const invitee = buildTestSDK();
-      //
-      // inviter.createInvite({
-      //   from: { walletAddress: "user_1_wallet_address", name: "User 1" },
-      //   to: { walletAddress: "user_2_wallet_address", name: "User 2" },
-      //   toJoinGroup: "group_id",
-      // });
-      //
-      // const inviteeInvites = await invitee.listInvites();
-      // expect(inviteeInvites).toEqual([
-      //   {
-      //     id: "something",
-      //     from: { walletAddress: "user_1_wallet_address", name: "User 1" },
-      //     to: { walletAddress: "user_2_wallet_address", name: "User 2" },
-      //     toJoinGroup: "group_id",
-      //     status: "pending",
-      //   },
-      // ]);
-      //
-      // invitee.accept(inviteeInvites[0].id);
-      //
-      // await wait();
-      //
-      // expect(await inviter.listInvites()).toEqual([
-      //   {
-      //     id: "something",
-      //     from: { walletAddress: "user_1_wallet_address", name: "User 1" },
-      //     to: { walletAddress: "user_2_wallet_address", name: "User 2" },
-      //     toJoinGroup: "group_id",
-      //     status: "accepted",
-      //   },
-      // ]);
-      //
-      // expect(await invitee.listInvites()).toEqual([
-      //   {
-      //     id: "something",
-      //     from: { walletAddress: "user_1_wallet_address", name: "User 1" },
-      //     to: { walletAddress: "user_2_wallet_address", name: "User 2" },
-      //     toJoinGroup: "group_id",
-      //     status: "accepted",
-      //   },
-      // ]);
+      const client2Invites = await client2.invites.listInvites();
+      expect(client2Invites).toEqual([
+        {
+          //TODO: fix id
+          id: "something",
+          from: { walletAddress: "address1", name: "User 1" },
+          to: { walletAddress: "address2", name: "User 2" },
+          toJoinGroup: "group_id",
+          status: "pending",
+        },
+      ]);
+
+      client2.invites.accept(client2Invites[0].id);
+
+      await wait();
+
+      expect(await client2.invites.listInvites()).toEqual([
+        {
+          //TODO: fix id
+          id: "something",
+          from: { walletAddress: "address1", name: "User 1" },
+          to: { walletAddress: "address2", name: "User 2" },
+          toJoinGroup: "group_id",
+          status: "accepted",
+        },
+      ]);
+
+      expect(await client1.invites.listInvites()).toEqual([
+        {
+          //TODO: fix id
+          id: "something",
+          from: { walletAddress: "address1", name: "User 1" },
+          to: { walletAddress: "address2", name: "User 2" },
+          toJoinGroup: "group_id",
+          status: "accepted",
+        },
+      ]);
     });
   });
 });

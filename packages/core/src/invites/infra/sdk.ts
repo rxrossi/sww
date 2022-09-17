@@ -36,11 +36,22 @@ export class InviteSDK {
           status: "pending",
         },
       },
-      [{ walletAddress: input.to.walletAddress }]
+      [
+        { walletAddress: input.to.walletAddress },
+        { walletAddress: this.ioClient.getAddress() },
+      ]
     );
   }
 
-  accept(inviteId: string) {
+  async accept(inviteId: string) {
+    const invites = await this.listInvitesUseCase.execute();
+    const invite = invites.find((it) => it.id === inviteId);
+
+    if (!invite) {
+      console.log("Could not find invite", { id: inviteId });
+      return;
+    }
+
     this.ioClient.send(
       {
         ulid: "ulid",
@@ -49,7 +60,10 @@ export class InviteSDK {
           type: InviteIOEventType.accept,
         },
       },
-      []
+      [
+        { walletAddress: invite.from.walletAddress },
+        { walletAddress: this.ioClient.getAddress() },
+      ]
     );
   }
 }

@@ -24,6 +24,10 @@ export class IOClientSharedNodeProcess implements IOClient {
     this.onEventHandlers.push(eventHandler);
   }
 
+  getAddress(): string {
+    return this.walletAddress;
+  }
+
   send(event: IOEvent, recipients: Array<IOEventRecipient>) {
     clients
       .filter(({ walletAddress }) =>

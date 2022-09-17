@@ -21,4 +21,5 @@ export interface IOClient<Payload extends { type: string } = { type: string }> {
     recipients: Array<IOEventRecipient>
   ): void;
   disconnect(): void;
+  getAddress(): string;
 }
