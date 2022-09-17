@@ -1,10 +1,11 @@
 {
-  "name": "@sww-core",
+  "name": "@sww/core",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest ."
+    "test": "jest .",
+    "type-check": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/jest": "^29.0.0",

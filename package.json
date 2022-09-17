@@ -1,6 +1,10 @@
 {
   "name": "sww",
   "private": true,
+  "scripts": {
+    "type-check": "lerna run type-check",
+    "test": "lerna run test"
+  },
   "devDependencies": {
     "lerna": "^5.5.1"
   }
