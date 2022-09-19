@@ -1,18 +1,20 @@
 import {
   IOClient,
-  IOEvent,
   IOEventRecipient,
-  OnEventHandler,
+  IncomingEventHandler,
+  OutgoingIOEvent,
 } from "src/shared/application/ioClient";
 
-let clients: Array<IOClientSharedNodeProcess> = [];
+let clients: Array<IOClientSharedNodeProcess<any, any>> = [];
 
 /**
  * Probably only useful for testing.
  * All clients need to be on the same Node.js process
  */
-export class IOClientSharedNodeProcess implements IOClient {
-  onEventHandlers: Array<OnEventHandler> = [];
+export class IOClientSharedNodeProcess<Data, Metadata>
+  implements IOClient<Data, Metadata>
+{
+  onEventHandlers: Array<IncomingEventHandler<Data, Metadata>> = [];
   walletAddress: string;
 
   constructor(walletAddress: string) {
@@ -20,7 +22,7 @@ export class IOClientSharedNodeProcess implements IOClient {
     clients.push(this);
   }
 
-  addOnEventHandler(eventHandler: OnEventHandler) {
+  addOnEventHandler(eventHandler: IncomingEventHandler<Data, Metadata>) {
     this.onEventHandlers.push(eventHandler);
   }
 
@@ -28,7 +30,10 @@ export class IOClientSharedNodeProcess implements IOClient {
     return this.walletAddress;
   }
 
-  send(event: IOEvent, recipients: Array<IOEventRecipient>) {
+  sendEvent(
+    event: OutgoingIOEvent<Data, Metadata>,
+    recipients: Array<IOEventRecipient>
+  ) {
     clients
       .filter(({ walletAddress }) =>
         recipients

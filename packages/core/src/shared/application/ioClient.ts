@@ -1,23 +1,28 @@
-export type IOEvent<Payload extends { type: string } = { type: string }> = {
-  ulid: string;
-  sentFrom: string;
-  payload: Payload;
-};
-
-export type OnEventHandler<
-  Payload extends { type: string } = { type: string }
-> = (event: IOEvent<Payload>, ack?: (ack: boolean) => void) => void;
-
 export type IOEventRecipient = {
   walletAddress: string;
 };
 
-//TODO: handle/add acknowledged
+type BaseIOEvent<Data, Metadata> = {
+  ulid: string;
+  data: Data;
+  metadata: Metadata;
+};
 
-export interface IOClient<Payload extends { type: string } = { type: string }> {
-  addOnEventHandler(eventHandler: OnEventHandler): void;
-  send(
-    event: Omit<IOEvent<Payload>, "sentFrom">,
+export type OutgoingIOEvent<Data, Metadata> = BaseIOEvent<Data, Metadata>;
+
+type IncomingIOEvent<Data, Metadata> = BaseIOEvent<Data, Metadata> & {
+  sentFrom: string;
+  // acknowledged: boolean
+};
+
+export type IncomingEventHandler<Data, Metadata> = (
+  event: IncomingIOEvent<Data, Metadata>
+) => void;
+
+export interface IOClient<Data, Metadata> {
+  addOnEventHandler(eventHandler: IncomingEventHandler<Data, Metadata>): void;
+  sendEvent(
+    event: OutgoingIOEvent<Data, Metadata>,
     recipients: Array<IOEventRecipient>
   ): void;
   disconnect(): void;
