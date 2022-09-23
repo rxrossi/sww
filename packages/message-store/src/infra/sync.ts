@@ -28,10 +28,7 @@ export class SyncImplementation implements Sync {
       };
 
       try {
-        this.sendMessage(
-          { ...m, metadata: newMetadata },
-          newSentTo.map((it) => it.address)
-        );
+        this.sendMessage({ ...m, metadata: newMetadata }, [addressToSyncWith]);
       } catch (e) {
         console.error("Error sending messages", {
           message: m,
