@@ -35,6 +35,8 @@ export class ParticipantsWithE2EE {
       publicKey,
       topicId,
     });
+    // TODO: when a participant has been updated and has public and address,
+    // it should fire a sync event
   };
 }
 
