@@ -1,7 +1,7 @@
-import { SDK } from "../sdk";
+import { buildSdks } from "../sdk";
 
 const buildClient = () => {
-  return new SDK();
+  return buildSdks();
 };
 
 describe("Application", () => {

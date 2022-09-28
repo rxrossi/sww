@@ -1,12 +1,9 @@
 import { Auth } from "./auth";
-import { Groups } from "./groups";
+import { buildSdk } from "./groups";
 
-export class SDK {
-  groups: Groups;
-  auth: Auth;
-
-  constructor() {
-    this.groups = new Groups();
-    this.auth = new Auth();
-  }
-}
+export const buildSdks = () => {
+  return {
+    groups: buildSdk(),
+    auth: new Auth(),
+  };
+};
