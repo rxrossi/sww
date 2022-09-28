@@ -26,25 +26,9 @@ describe("Application", () => {
     client2.auth.auth("address2");
     const client2WalletAddress = client2.auth.getWalletAddress();
 
-    client1.groups.invite({ groupId, address: client2WalletAddress });
+    client1.groups.invites.invite({ groupId, address: client2WalletAddress });
 
-    expect(client1.groups.listInvites()).toEqual([
-      {
-        toJoin: {
-          name: "Algarve expenses",
-          groupId,
-        },
-        from: {
-          walletAddress: "address1",
-        },
-        to: {
-          walletAddress: client2WalletAddress,
-        },
-      },
-    ]);
-
-    return;
-    expect(client2.groups.listInvites()).toEqual([
+    expect(client1.groups.invites.list()).toEqual([
       {
         toJoin: {
           name: "Algarve expenses",
