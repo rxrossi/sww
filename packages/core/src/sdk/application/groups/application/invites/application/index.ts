@@ -22,6 +22,8 @@ export type Invite = {
 
 export type NewInviteIncoming = IncomingEvent<Invite>;
 
+type EventType = "groups-invites:invite";
+
 type InvitesDeps = {
   groupsRepository: GroupsRepository;
   emitEvent: EmitEvent;
@@ -57,6 +59,7 @@ export class Invites {
       },
     };
 
+    const type: EventType = "groups-invites:invite";
     this.deps.emitEvent(
       {
         ulid: "TODO",
@@ -64,7 +67,7 @@ export class Invites {
           payload,
           createdBy: "TODO",
           timestamp: Date.now(),
-          type: "groups-invites:invite", //TODO
+          type,
         },
       },
       address
@@ -84,10 +87,13 @@ export class InvitesEventHandler {
   ) {}
 
   eventHandler: EventHandler<IncomingEvent> = (event) => {
-    const isNewInvite = event.payload.data.type === "groups-invites:invite";
+    const newInviteType: EventType = "groups-invites:invite";
 
-    if (isNewInvite) {
-      this.deps.invitesRepository.create(event.payload.data.payload);
+    switch (event.payload.data.type) {
+      case newInviteType: {
+        this.deps.invitesRepository.create(event.payload.data.payload);
+        break;
+      }
     }
   };
 }
