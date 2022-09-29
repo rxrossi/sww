@@ -1,4 +1,4 @@
-import { BaseIoClient, EventHandler } from "../base-io-client";
+import { BaseIoClient, EmitEvent, EventHandler } from "../base-io-client";
 import { Client } from "@sww/ws-client";
 
 export class SocketIoClient implements BaseIoClient {
@@ -14,21 +14,13 @@ export class SocketIoClient implements BaseIoClient {
     this.client.connect;
   }
 
-  send = ({
-    eventULID,
-    payload,
-    to,
-  }: {
-    eventULID: string;
-    payload: any;
-    to: string;
-  }): void => {
+  send: EmitEvent = (event, address) => {
     this.client.sendEvent({
-      eventULID,
-      payload,
-      to,
+      eventULID: event.ulid,
+      payload: event,
+      to: address,
     });
-    this.eventHandler({ payload, eventULID, from: "TODO" });
+    this.eventHandler({ payload: event, eventULID: event.ulid, from: "TODO" });
   };
 
   //TODO

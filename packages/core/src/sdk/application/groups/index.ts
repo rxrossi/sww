@@ -1,4 +1,4 @@
-import { EventInput } from "../events";
+import { NewEventInput } from "../events";
 import { EmitEvent, EventHandler } from "../io-client/base-io-client";
 import {
   Invites,
@@ -12,7 +12,7 @@ export const buildSdk = ({
   emitEvent,
   addOnEvent,
 }: {
-  emitEvent: EmitEvent<EventInput<any, any>>;
+  emitEvent: EmitEvent<NewEventInput<any, any>>;
   addOnEvent: (eventHandler: EventHandler<any>) => void;
 }): Groups => {
   const repository = new GroupsRepositoryInMemory();

@@ -6,8 +6,7 @@ export const buildSdks = () => {
 
   return {
     groups: buildSdk({
-      emitEvent: (evt, address) =>
-        ioClient.send({ payload: evt, to: address, eventULID: evt.ulid }),
+      emitEvent: ioClient.send,
       addOnEvent: ioClient.addOnEvent,
     }),
     ioClient,

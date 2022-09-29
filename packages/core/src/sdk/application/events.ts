@@ -1,6 +1,6 @@
 import { Address } from "./shared-types";
 
-export type EventInput<payload, type> = {
+export type NewEventInput<payload, type> = {
   ulid: string;
   data: {
     createdBy: Address;
@@ -10,7 +10,7 @@ export type EventInput<payload, type> = {
   };
 };
 
-export type OutgoingEvent<payload = any, type = string> = EventInput<
+export type OutgoingEvent<payload = any, type = string> = NewEventInput<
   payload,
   type
 > & {

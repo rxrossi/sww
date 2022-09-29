@@ -1,4 +1,4 @@
-import { EventInput, IncomingEvent } from "src/sdk/application/events";
+import { IncomingEvent } from "src/sdk/application/events";
 import {
   EmitEvent,
   EventHandler,
@@ -20,13 +20,11 @@ export type Invite = {
   };
 };
 
-export type NewInviteOutgoing = EventInput<Invite, "groups-invites:invite">;
-
 export type NewInviteIncoming = IncomingEvent<Invite>;
 
 type InvitesDeps = {
   groupsRepository: GroupsRepository;
-  emitEvent: EmitEvent<NewInviteOutgoing>;
+  emitEvent: EmitEvent;
   invitesRepository: InvitesRepository;
 };
 
@@ -61,14 +59,13 @@ export class Invites {
 
     this.deps.emitEvent(
       {
+        ulid: "TODO",
         data: {
-          payload: payload,
-          //TODO: get address in a different way
-          createdBy: "address1",
+          payload,
+          createdBy: "TODO",
           timestamp: Date.now(),
-          type: "groups-invites:invite",
+          type: "groups-invites:invite", //TODO
         },
-        ulid: "ulid",
       },
       address
     );
