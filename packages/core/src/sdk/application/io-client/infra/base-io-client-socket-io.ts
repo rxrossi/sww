@@ -3,7 +3,7 @@ import { Client } from "@sww/ws-client";
 
 export class SocketIoClient implements BaseIoClient {
   private client: Client<any>;
-  private eventHandlers: Array<(event: any) => void> = [];
+  private eventHandlers: Array<EventHandler<any>> = [];
 
   constructor(uri: string) {
     this.client = new Client({
@@ -23,8 +23,6 @@ export class SocketIoClient implements BaseIoClient {
     this.eventHandler({ payload: event, eventULID: event.ulid, from: "TODO" });
   };
 
-  //TODO
-  //@ts-ignore
   addOnEvent = (eventHandler: EventHandler<any>): void => {
     this.eventHandlers.push(eventHandler);
   };
