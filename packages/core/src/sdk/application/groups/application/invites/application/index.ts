@@ -65,7 +65,6 @@ export class Invites {
         ulid: "TODO",
         data: {
           payload,
-          createdBy: "TODO",
           timestamp: Date.now(),
           type,
         },

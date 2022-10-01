@@ -3,7 +3,6 @@ import { Address } from "./shared-types";
 export type NewEventInput<payload, type> = {
   ulid: string;
   data: {
-    createdBy: Address;
     timestamp: number;
     type: type;
     payload: payload;
@@ -22,6 +21,5 @@ export type OutgoingEvent<payload = any, type = string> = NewEventInput<
 };
 
 export type IncomingEvent<payload = any> = OutgoingEvent<payload> & {
-  createdBy: Address;
   sentFrom: Address;
 };
