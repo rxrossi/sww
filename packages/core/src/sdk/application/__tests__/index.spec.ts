@@ -12,59 +12,74 @@ const wait = (timeMs: number = 100) =>
   });
 
 describe("Application", () => {
-  test("creates a group", async () => {
+  describe("Creating a group", () => {
     const client = buildClient();
-    client.ioClient.connect({ signedMessage: "message", address: "address1" });
 
-    client.groups.create({ name: "Algarve expenses" });
-    await wait();
+    afterEach(() => {
+      client.ioClient.disconnect();
+    });
 
-    expect(client.groups.list()).toEqual([
-      { name: "Algarve expenses", id: expect.any(String) },
-    ]);
+    test("creates a group", async () => {
+      client.ioClient.connect({
+        signedMessage: "message",
+        address: "address1",
+      });
 
-    client.ioClient.disconnect();
+      client.groups.create({ name: "Algarve expenses" });
+      await wait();
 
-    await wait();
+      expect(client.groups.list()).toEqual([
+        { name: "Algarve expenses", id: expect.any(String) },
+      ]);
+    });
   });
 
-  test("can invite a person to a group", async () => {
+  describe("Inviting to a Group", () => {
     const client1 = buildClient();
-    client1.ioClient.connect({ signedMessage: "message", address: "address1" });
-
-    client1.groups.create({ name: "Algarve expenses" });
-    const groupId = client1.groups.list()[0].id;
-
     const client2 = buildClient();
-    client2.ioClient.connect({ signedMessage: "message", address: "address2" });
     const client2WalletAddress = "address2";
 
-    await wait();
+    client1.ioClient.connect({
+      signedMessage: "message",
+      address: "address1",
+    });
+    client2.ioClient.connect({
+      signedMessage: "message",
+      address: client2WalletAddress,
+    });
 
-    client1.groups.invites.invite({ groupId, address: client2WalletAddress });
+    afterEach(() => {
+      client1.ioClient.disconnect();
+      client2.ioClient.disconnect();
+    });
 
-    await wait();
+    test("can invite a person to a group", async () => {
+      client1.groups.create({ name: "Algarve expenses" });
+      const groupId = client1.groups.list()[0].id;
 
-    expect(client1.groups.invites.list()).toEqual([
-      {
-        id: expect.any(String),
-        toJoin: { name: "Algarve expenses", groupId },
-        from: { walletAddress: "address1" },
-        to: { walletAddress: client2WalletAddress },
-      },
-    ]);
+      await wait();
 
-    expect(client2.groups.invites.list()).toEqual([
-      {
-        id: expect.any(String),
-        toJoin: { name: "Algarve expenses", groupId },
-        from: { walletAddress: "address1" },
-        to: { walletAddress: client2WalletAddress },
-      },
-    ]);
+      client1.groups.invites.invite({ groupId, address: client2WalletAddress });
 
-    client1.ioClient.disconnect();
-    client2.ioClient.disconnect();
-    await wait();
+      await wait();
+
+      expect(client1.groups.invites.list()).toEqual([
+        {
+          id: expect.any(String),
+          toJoin: { name: "Algarve expenses", groupId },
+          from: { walletAddress: "address1" },
+          to: { walletAddress: client2WalletAddress },
+        },
+      ]);
+
+      expect(client2.groups.invites.list()).toEqual([
+        {
+          id: expect.any(String),
+          toJoin: { name: "Algarve expenses", groupId },
+          from: { walletAddress: "address1" },
+          to: { walletAddress: client2WalletAddress },
+        },
+      ]);
+    });
   });
 });
