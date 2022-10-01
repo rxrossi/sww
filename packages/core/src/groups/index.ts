@@ -1,5 +1,4 @@
-import { InvitesEventHandler, InvitesSdk } from "src/invites/application";
-import { InvitesRepositoryInMemory } from "src/invites/infra/repository-in-memory";
+import { buildSdk as buildInvitesSdk } from "src/invites/application";
 import { NewEventInput } from "src/sdk/application/events";
 import {
   EmitEvent,
@@ -15,19 +14,17 @@ export const buildSdk = ({
   emitEvent: EmitEvent<NewEventInput<any, any>>;
   addOnEvent: (eventHandler: EventHandler<any>) => void;
 }): Groups => {
-  const repository = new GroupsRepositoryInMemory();
-  const invitesRepository = new InvitesRepositoryInMemory();
+  const groupsRepository = new GroupsRepositoryInMemory();
 
-  const invitesEventHandler = new InvitesEventHandler({ invitesRepository });
-  addOnEvent(invitesEventHandler.eventHandler);
+  const invites = buildInvitesSdk({
+    emitEvent,
+    groupsRepository: groupsRepository,
+    addOnEvent,
+  });
 
   const sdk = new Groups({
-    repository,
-    invites: new InvitesSdk({
-      groupsRepository: repository,
-      invitesRepository,
-      emitEvent,
-    }),
+    repository: groupsRepository,
+    invites: invites,
   });
 
   return sdk;
