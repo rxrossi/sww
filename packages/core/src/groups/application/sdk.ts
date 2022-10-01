@@ -1,4 +1,4 @@
-import { Invites } from "./invites";
+import { InvitesSdk } from "./invites/sdk";
 import { GroupsRepository } from "./repository";
 
 export type Group = {
@@ -8,11 +8,11 @@ export type Group = {
 
 type GroupsDeps = {
   repository: GroupsRepository;
-  invites: Invites;
+  invites: InvitesSdk;
 };
 
 export class Groups {
-  invites: Invites;
+  invites: InvitesSdk;
 
   constructor(private deps: GroupsDeps) {
     this.invites = deps.invites;
