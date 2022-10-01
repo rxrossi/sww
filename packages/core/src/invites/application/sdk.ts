@@ -1,5 +1,5 @@
+import { GroupsRepository } from "src/groups/application/repository";
 import { EmitEvent } from "src/sdk/application/io-client/application/base-io-client";
-import { GroupsRepository } from "../repository";
 import { EventType } from "./events";
 import { InvitesRepository } from "./repository";
 

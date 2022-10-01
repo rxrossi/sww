@@ -1,4 +1,4 @@
-import { InvitesSdk } from "./invites/sdk";
+import { InvitesSdk } from "src/invites/application";
 import { GroupsRepository } from "./repository";
 
 export type Group = {
