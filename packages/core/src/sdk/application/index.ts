@@ -5,7 +5,7 @@ import { SocketIoClient } from "./io-client/infra/base-io-client-socket-io";
 export const buildSdk = () => {
   const groups = buildGroupsSdk();
 
-  const ioClient = new SocketIoClient("http://localhost:9978");
+  const ioClient = new SocketIoClient("http://localhost:9977");
 
   const invites = buildInvitesSdk({
     emitEvent: ioClient.send,

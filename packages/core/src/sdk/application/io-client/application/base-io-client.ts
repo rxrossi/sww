@@ -1,5 +1,5 @@
-import { NewEventInput } from "../../events";
-import { Address } from "../../shared-types";
+import { NewEventInput } from "src/shared/event";
+import { Address } from "src/shared/shared-types";
 
 export type EmitEvent<Payload = any, Type = string> = (
   event: NewEventInput<Payload, Type>,

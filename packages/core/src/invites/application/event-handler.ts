@@ -1,4 +1,4 @@
-import { IncomingEvent } from "src/sdk/application/events";
+import { Event } from "src/shared/event";
 import { EventHandler } from "src/sdk/application/io-client/application/base-io-client";
 import { EventType } from "./events";
 import { InvitesRepository } from "./repository";
@@ -10,7 +10,7 @@ export class InvitesEventHandler {
     }
   ) {}
 
-  eventHandler: EventHandler<IncomingEvent> = (event) => {
+  eventHandler: EventHandler<Event> = (event) => {
     const newInviteType: EventType = "groups-invites:invite";
 
     switch (event.payload.data.type) {
