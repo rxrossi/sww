@@ -1,4 +1,4 @@
-import { buildSdk } from "./groups";
+import { buildSdk } from "src/groups";
 import { SocketIoClient } from "./io-client/infra/base-io-client-socket-io";
 
 export const buildSdks = () => {

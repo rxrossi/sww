@@ -1,8 +1,8 @@
-import { NewEventInput } from "../events";
+import { NewEventInput } from "src/sdk/application/events";
 import {
   EmitEvent,
   EventHandler,
-} from "../io-client/application/base-io-client";
+} from "src/sdk/application/io-client/application/base-io-client";
 import {
   Invites,
   InvitesEventHandler,
