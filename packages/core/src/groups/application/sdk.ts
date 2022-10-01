@@ -1,4 +1,3 @@
-import { InvitesSdk } from "src/invites/application";
 import { GroupsRepository } from "./repository";
 
 export type Group = {
@@ -8,15 +7,10 @@ export type Group = {
 
 type GroupsDeps = {
   repository: GroupsRepository;
-  invites: InvitesSdk;
 };
 
 export class Groups {
-  invites: InvitesSdk;
-
-  constructor(private deps: GroupsDeps) {
-    this.invites = deps.invites;
-  }
+  constructor(private deps: GroupsDeps) {}
 
   list() {
     return this.deps.repository.list();

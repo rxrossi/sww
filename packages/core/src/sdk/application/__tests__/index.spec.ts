@@ -1,7 +1,7 @@
-import { buildSdks } from "../sdk";
+import { buildSdk } from "../";
 
 const buildClient = () => {
-  return buildSdks();
+  return buildSdk();
 };
 
 const wait = (timeMs: number = 100) =>
@@ -59,11 +59,11 @@ describe("Application", () => {
 
       await wait();
 
-      client1.groups.invites.invite({ groupId, address: client2WalletAddress });
+      client1.invites.invite({ groupId, address: client2WalletAddress });
 
       await wait();
 
-      expect(client1.groups.invites.list()).toEqual([
+      expect(client1.invites.list()).toEqual([
         {
           id: expect.any(String),
           toJoin: { name: "Algarve expenses", groupId },
@@ -72,7 +72,7 @@ describe("Application", () => {
         },
       ]);
 
-      expect(client2.groups.invites.list()).toEqual([
+      expect(client2.invites.list()).toEqual([
         {
           id: expect.any(String),
           toJoin: { name: "Algarve expenses", groupId },

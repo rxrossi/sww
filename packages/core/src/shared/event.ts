@@ -20,6 +20,6 @@ export type OutgoingEvent<payload = any, type = string> = NewEventInput<
   };
 };
 
-export type IncomingEvent<payload = any> = OutgoingEvent<payload> & {
+export type Event<payload = any> = OutgoingEvent<payload> & {
   sentFrom: Address;
 };

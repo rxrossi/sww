@@ -63,3 +63,28 @@ Usual flow:
       └────────────► │Client A Event Handler│
                      └──────────────────────┘
 ```
+
+## Modules
+
+```
+      ┌Application───┐
+      │              │
+      │┌SDK───────┐  │
+      ││┌────────┐│  │
+      │││Invites ││  │
+      │││Groups  ││  │
+      │││Members ││  │
+      │││Expenses││  │
+      ││└────────┘│  │
+      │└──────────┘  │
+      │              │
+      │┌Events────┐  │
+      ││EventsSync│  │
+      │└──────────┘  │
+      │              │
+      │┌IoClient──┐  │
+      ││BaseClient│  │
+      ││E2EE      │  │
+      │└──────────┘  │
+      └──────────────┘
+```

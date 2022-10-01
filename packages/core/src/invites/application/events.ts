@@ -1,5 +1,5 @@
-import { Invite } from "src/groups/domain/invite";
-import { IncomingEvent } from "src/sdk/application/events";
+import { IncomingEvent } from "src/shared/event";
+import { Invite } from "../domain/invite";
 
 export type NewInviteIncoming = IncomingEvent<Invite>;
 
