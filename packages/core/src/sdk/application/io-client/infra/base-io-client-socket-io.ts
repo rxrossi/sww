@@ -1,4 +1,8 @@
-import { BaseIoClient, EmitEvent, EventHandler } from "../base-io-client";
+import {
+  BaseIoClient,
+  EmitEvent,
+  EventHandler,
+} from "../application/base-io-client";
 import { Client } from "@sww/ws-client";
 
 export class SocketIoClient implements BaseIoClient {

@@ -1,5 +1,8 @@
 import { NewEventInput } from "../events";
-import { EmitEvent, EventHandler } from "../io-client/base-io-client";
+import {
+  EmitEvent,
+  EventHandler,
+} from "../io-client/application/base-io-client";
 import {
   Invites,
   InvitesEventHandler,

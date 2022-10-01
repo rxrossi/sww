@@ -2,7 +2,7 @@ import { IncomingEvent } from "src/sdk/application/events";
 import {
   EmitEvent,
   EventHandler,
-} from "src/sdk/application/io-client/base-io-client";
+} from "src/sdk/application/io-client/application/base-io-client";
 import { GroupsRepository } from "../../repository";
 import { InvitesRepository } from "./repository";
 
