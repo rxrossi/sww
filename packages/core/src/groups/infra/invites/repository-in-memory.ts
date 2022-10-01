@@ -1,7 +1,7 @@
 import {
   InvitesRepository,
   InvitesRepositoryEntry,
-} from "../application/repository";
+} from "src/groups/application/invites/repository";
 
 export class InvitesRepositoryInMemory implements InvitesRepository {
   private entries: Array<InvitesRepositoryEntry> = [];

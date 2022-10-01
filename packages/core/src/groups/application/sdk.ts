@@ -1,4 +1,4 @@
-import { Invites } from "./invites/application";
+import { Invites } from "./invites";
 import { GroupsRepository } from "./repository";
 
 export type Group = {

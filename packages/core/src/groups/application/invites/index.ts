@@ -3,7 +3,7 @@ import {
   EmitEvent,
   EventHandler,
 } from "src/sdk/application/io-client/application/base-io-client";
-import { GroupsRepository } from "../../repository";
+import { GroupsRepository } from "../repository";
 import { InvitesRepository } from "./repository";
 
 export type Invite = {

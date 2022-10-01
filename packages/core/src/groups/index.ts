@@ -3,12 +3,9 @@ import {
   EmitEvent,
   EventHandler,
 } from "src/sdk/application/io-client/application/base-io-client";
-import {
-  Invites,
-  InvitesEventHandler,
-} from "./application/invites/application";
-import { InvitesRepositoryInMemory } from "./application/invites/infra/repository-in-memory";
+import { Invites, InvitesEventHandler } from "./application/invites";
 import { Groups } from "./application/sdk";
+import { InvitesRepositoryInMemory } from "./infra/invites/repository-in-memory";
 import { GroupsRepositoryInMemory } from "./infra/repository-in-memory";
 
 export const buildSdk = ({
