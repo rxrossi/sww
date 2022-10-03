@@ -1,3 +1,6 @@
+import { Ids } from "src/ids";
+import { EmitEvent } from "src/sdk/application/io-client/application/base-io-client";
+import { EventType } from "./events";
 import { GroupsRepository } from "./repository";
 
 export type Group = {
@@ -5,18 +8,36 @@ export type Group = {
   name: string;
 };
 
-type GroupsDeps = {
+type Dependencies = {
   repository: GroupsRepository;
+  emitEvent: EmitEvent;
+  ids: Ids;
 };
 
 export class Groups {
-  constructor(private deps: GroupsDeps) {}
+  constructor(private deps: Dependencies) {}
 
   list() {
     return this.deps.repository.list();
   }
 
   create({ name }: { name: string }) {
-    return this.deps.repository.create({ name });
+    const payload = {
+      id: this.deps.ids.id(),
+      name,
+    };
+    const type: EventType = "groups:new";
+    this.deps.emitEvent(
+      {
+        ulid: "TODO",
+        data: {
+          groupId: payload.id,
+          payload,
+          timestamp: Date.now(),
+          type,
+        },
+      },
+      ""
+    );
   }
 }

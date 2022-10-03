@@ -63,9 +63,12 @@ describe("Application", () => {
 
       await wait();
 
-      expect(client1.invites.list()).toEqual([
+      const client1Invites = client1.invites.list();
+
+      expect(client1Invites).toEqual([
         {
           id: expect.any(String),
+          status: "pending",
           toJoin: { name: "Algarve expenses", groupId },
           from: { walletAddress: "address1" },
           to: { walletAddress: client2WalletAddress },
@@ -75,11 +78,51 @@ describe("Application", () => {
       expect(client2.invites.list()).toEqual([
         {
           id: expect.any(String),
+          status: "pending",
           toJoin: { name: "Algarve expenses", groupId },
           from: { walletAddress: "address1" },
           to: { walletAddress: client2WalletAddress },
         },
       ]);
+
+      client2.invites.accept({ inviteId: client1Invites[0].id });
+
+      await wait();
+
+      expect(client1Invites).toEqual([
+        {
+          id: expect.any(String),
+          status: "accepted",
+          toJoin: { name: "Algarve expenses", groupId },
+          from: { walletAddress: "address1" },
+          to: { walletAddress: client2WalletAddress },
+        },
+      ]);
+
+      expect(client2.invites.list()).toEqual([
+        {
+          id: expect.any(String),
+          status: "accepted",
+          toJoin: { name: "Algarve expenses", groupId },
+          from: { walletAddress: "address1" },
+          to: { walletAddress: client2WalletAddress },
+        },
+      ]);
+
+      // This thing should be fixed by syncing (needs the event store)
+      expect(client2.groups.list()).toEqual([
+        {
+          id: expect.any(String),
+          name: "Algarve expenses",
+        },
+      ]);
+
+      //TODO:
+      // 1. Asserts the status as well [x]
+      // 2. client2 accepts the invite
+      // 3. client1 calls the syncGroupWith()
+      // 4. both clients asserts the members for that group
+      // 5. Assert that client2 has the group when calling groups.list()
     });
   });
 });

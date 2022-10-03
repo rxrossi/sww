@@ -4,6 +4,7 @@ import {
   EventHandler,
 } from "../application/base-io-client";
 import { Client } from "@sww/ws-client";
+import { OutgoingEvent } from "src/shared/event";
 
 export class SocketIoClient implements BaseIoClient {
   private client: Client<any>;
@@ -19,12 +20,28 @@ export class SocketIoClient implements BaseIoClient {
   }
 
   send: EmitEvent = (event, address) => {
+    const updatedEvent: OutgoingEvent = {
+      ...event,
+      ioData: {
+        sentTo: [address],
+        meantToBeSentTo: [address],
+        timestamp: Date.now(),
+      },
+    };
+
+    //TODO Add tests for this or extract it
     this.client.sendEvent({
       eventULID: event.ulid,
-      payload: event,
+      payload: updatedEvent,
       to: address,
     });
-    this.eventHandler({ payload: event, eventULID: event.ulid, from: "TODO" });
+
+    //TODO Add tests for this or extract it
+    this.eventHandler({
+      payload: updatedEvent,
+      eventULID: event.ulid,
+      from: "TODO",
+    });
   };
 
   addOnEvent = (eventHandler: EventHandler<any>): void => {

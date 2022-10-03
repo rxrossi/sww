@@ -6,9 +6,9 @@ import {
 export class GroupsRepositoryInMemory implements GroupsRepository {
   private entries: Array<GroupsRepositoryEntry> = [];
 
-  create = ({ name }: { name: string }): void => {
+  create = ({ name, id }: { id: string; name: string }): void => {
     this.entries.push({
-      id: "id",
+      id,
       name,
     });
   };

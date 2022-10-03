@@ -6,7 +6,11 @@ export type EmitEvent<Payload = any, Type = string> = (
   to: Address
 ) => void;
 
-export type EventHandler<Event> = (event: { payload: Event }) => void;
+export type EventHandler<Event> = (event: {
+  payload: Event;
+  from: string;
+  eventULID: string;
+}) => void;
 
 export interface BaseIoClient<OutgoingEvent = any, IncomingEvent = any> {
   send: EmitEvent<OutgoingEvent>;

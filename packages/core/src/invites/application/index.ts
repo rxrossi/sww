@@ -1,4 +1,6 @@
+import { SyncGroupWith } from "src/event-sync";
 import { GroupsRepository } from "src/groups/application/repository";
+import { Ids } from "src/ids";
 import {
   EmitEvent,
   EventHandler,
@@ -14,10 +16,14 @@ export const buildSdk = ({
   emitEvent,
   groupsRepository,
   addOnEvent,
+  syncGroupWith,
+  ids,
 }: {
   emitEvent: EmitEvent;
   addOnEvent: (eventHandler: EventHandler<any>) => void;
   groupsRepository: GroupsRepository;
+  syncGroupWith: SyncGroupWith;
+  ids: Ids;
 }) => {
   const invitesRepository = new InvitesRepositoryInMemory();
 
@@ -25,10 +31,12 @@ export const buildSdk = ({
     emitEvent,
     groupsRepository,
     invitesRepository,
+    ids,
   });
 
   const { eventHandler } = new InvitesEventHandler({
     invitesRepository,
+    syncGroupWith,
   });
 
   addOnEvent(eventHandler);

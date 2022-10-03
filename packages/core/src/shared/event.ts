@@ -5,6 +5,7 @@ export type NewEventInput<payload, type> = {
   data: {
     timestamp: number;
     type: type;
+    groupId: string;
     payload: payload;
   };
 };
@@ -20,6 +21,6 @@ export type OutgoingEvent<payload = any, type = string> = NewEventInput<
   };
 };
 
-export type Event<payload = any> = OutgoingEvent<payload> & {
+export type Evt<payload = any, type = string> = OutgoingEvent<payload, type> & {
   sentFrom: Address;
 };

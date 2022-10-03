@@ -10,4 +10,5 @@ export type Invite = {
   from: {
     walletAddress: string;
   };
+  status: "pending" | "accepted";
 };
