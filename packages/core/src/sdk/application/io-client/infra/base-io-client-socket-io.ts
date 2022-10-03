@@ -23,8 +23,12 @@ export class SocketIoClient implements BaseIoClient {
     const updatedEvent: OutgoingEvent = {
       ...event,
       ioData: {
-        sentTo: [address],
-        meantToBeSentTo: [address],
+        sentTo: event.ioData?.sentTo
+          ? event.ioData.sentTo.concat(address)
+          : [address],
+        meantToBeSentTo: event.ioData?.meantToBeSentTo
+          ? event.ioData.meantToBeSentTo.concat(address)
+          : [address],
         timestamp: Date.now(),
       },
     };

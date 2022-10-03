@@ -2,7 +2,7 @@ import { EventHandler } from "src/sdk/application/io-client/application/base-io-
 import { Evt } from "src/shared/event";
 
 interface EventsRepository {
-  add(event: Evt): void;
+  upsert(event: Evt): void;
   getByUlid(ulid: string): Evt | undefined;
   getAllByGroupId(groupId: string): Array<Evt>;
 }
@@ -10,8 +10,13 @@ interface EventsRepository {
 export class EventsRepositoryInMemory implements EventsRepository {
   entries: Array<Evt> = [];
 
-  add = (event: Evt) => {
-    this.entries.push(event);
+  upsert = (event: Evt) => {
+    const index = this.entries.findIndex((it) => it.ulid === event.ulid);
+    if (index < 0) {
+      this.entries.push(event);
+    } else {
+      this.entries[index] = event;
+    }
   };
 
   getByUlid = (ulid: string) => {
@@ -32,8 +37,8 @@ export class Events {
     }
   ) {}
 
-  private addEvent = (event: Evt) => {
-    this.deps.repository.add(event);
+  private upsertEvent = (event: Evt) => {
+    this.deps.repository.upsert(event);
   };
 
   getAllByGroupId = (groupId: string) => {
@@ -46,12 +51,8 @@ export class Events {
 
   eventHandler: EventHandler<Evt> = (event) => {
     //TODO: handle duplicated event based on ulid
-    const evt = this.deps.repository.getByUlid(event.eventULID);
-    if (evt) {
-      return;
-    }
 
-    this.addEvent({
+    this.upsertEvent({
       data: event.payload.data,
       ioData: event.payload.ioData,
       ulid: event.payload.ulid,
