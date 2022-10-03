@@ -109,7 +109,6 @@ describe("Application", () => {
         },
       ]);
 
-      // This thing should be fixed by syncing (needs the event store)
       expect(client2.groups.list()).toEqual([
         {
           id: expect.any(String),
@@ -118,11 +117,7 @@ describe("Application", () => {
       ]);
 
       //TODO:
-      // 1. Asserts the status as well [x]
-      // 2. client2 accepts the invite
-      // 3. client1 calls the syncGroupWith()
-      // 4. both clients asserts the members for that group
-      // 5. Assert that client2 has the group when calling groups.list()
+      // both clients asserts the members for that group
     });
   });
 });
