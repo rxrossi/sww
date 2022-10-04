@@ -52,7 +52,7 @@ export class InvitesSdk {
           type,
         },
       },
-      address
+      [address]
     );
   };
 
@@ -83,7 +83,7 @@ export class InvitesSdk {
           type,
         },
       },
-      invite.from.walletAddress
+      [invite.from.walletAddress]
     );
   };
 

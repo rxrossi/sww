@@ -3,7 +3,7 @@ import { Address } from "src/shared/shared-types";
 
 export type EmitEvent<Payload = any, Type = string> = (
   event: NewEventInput<Payload, Type>,
-  to: Address
+  to: Array<Address>
 ) => void;
 
 export type EventHandler<Event> = (event: {

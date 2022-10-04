@@ -19,28 +19,28 @@ export class SocketIoClient implements BaseIoClient {
     this.client.connect;
   }
 
-  send: EmitEvent = (event, address) => {
+  send: EmitEvent = (event, addresses) => {
     const updatedEvent: OutgoingEvent = {
       ...event,
       ioData: {
         sentTo: event.ioData?.sentTo
-          ? event.ioData.sentTo.concat(address)
-          : [address],
-        meantToBeSentTo: event.ioData?.meantToBeSentTo
-          ? event.ioData.meantToBeSentTo.concat(address)
-          : [address],
+          ? event.ioData.sentTo.concat(...addresses)
+          : addresses,
+        //TODO: Meant to be sent to only makes sense for the E2EE version
+        meantToBeSentTo: event.ioData?.meantToBeSentTo || [],
         timestamp: Date.now(),
       },
     };
 
-    //TODO Add tests for this or extract it
-    this.client.sendEvent({
-      eventULID: event.ulid,
-      payload: updatedEvent,
-      to: address,
+    addresses.forEach((address) => {
+      //TODO Add tests for this or extract it
+      this.client.sendEvent({
+        eventULID: event.ulid,
+        payload: updatedEvent,
+        to: address,
+      });
     });
 
-    //TODO Add tests for this or extract it
     this.eventHandler({
       payload: updatedEvent,
       eventULID: event.ulid,

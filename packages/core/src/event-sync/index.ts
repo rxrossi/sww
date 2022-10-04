@@ -19,7 +19,7 @@ export class EventsSync {
 
     toSend.forEach((event) => {
       //TODO: the ioClient should update the sentTo
-      this.deps.emitEvent(event, address);
+      this.deps.emitEvent(event, [address]);
     });
   };
 }
