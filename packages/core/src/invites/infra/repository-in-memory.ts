@@ -22,7 +22,7 @@ export class InvitesRepositoryInMemory implements InvitesRepository {
     const index = this.entries.findIndex((it) => it.id === id);
 
     if (index < 0) {
-      console.log("Could not update entry that does not exist", {
+      console.error("Could not update entry that does not exist", {
         id,
       });
       throw new Error("Could not update entry that does not exist");

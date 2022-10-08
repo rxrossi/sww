@@ -3,6 +3,7 @@ import { Address } from "./shared-types";
 type IoData = {
   timestamp: number;
   meantToBeSentTo: Array<Address>;
+  //TODO: rename sentTo to couldSendTo or something
   sentTo: Array<Address>;
 };
 
@@ -15,7 +16,7 @@ export type NewEventInput<payload, type> = {
     payload: payload;
   };
   ioData?: IoData;
-  sendFrom?: Address;
+  sentFrom?: Address;
 };
 
 export type OutgoingEvent<payload = any, type = string> = NewEventInput<

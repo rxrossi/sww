@@ -45,7 +45,7 @@ function onConnection(socket: SocketType) {
   logger.info("Client connected", { id: socket.data.walletAddress });
 
   if (!socket.data.walletAddress) {
-    logger.warn("client without data.walletAddress requesting messages");
+    logger.warn("Client connected without wallet address");
     return;
   }
 

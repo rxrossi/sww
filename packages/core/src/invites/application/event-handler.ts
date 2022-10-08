@@ -27,7 +27,7 @@ export class InvitesEventHandler {
         const invite = this.deps.invitesRepository.getById(inviteId);
 
         if (!invite) {
-          console.log("Invite not found", {
+          console.error("Invite not found", {
             inviteId,
           });
 
