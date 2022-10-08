@@ -10,7 +10,7 @@ const buildTestClient = () =>
 
 const wait = () =>
   new Promise((resolve) => {
-    setTimeout(() => resolve(null), 1000);
+    setTimeout(() => resolve(null), 300);
   });
 
 describe("IO Client with E2EE", () => {
@@ -46,33 +46,45 @@ describe("IO Client with E2EE", () => {
 
     await wait();
 
-    return;
-    // console.log("client 1", JSON.stringify(onEventClient1.mock.calls, null, 2));
-    // console.log("client 2", JSON.stringify(onEventClient2.mock.calls, null, 2));
-    // return;
-
-    expect(onEventClient1).toHaveBeenCalledTimes(2);
+    expect(onEventClient1).toHaveBeenCalledTimes(3);
     expect(onEventClient1).toHaveBeenNthCalledWith(1, {
-      publicKey: expect.anything(),
-      sentFrom: client1Address, // sent the event to himself
-      type: "exchange-keys",
+      ...event,
+      ioData: {
+        meantToBeSentTo: ["address 2", "address 1"],
+        sentTo: ["address 1"],
+        timestamp: expect.any(Number),
+      },
+      sentFrom: "address 1",
     });
     expect(onEventClient1).toHaveBeenNthCalledWith(2, {
+      ...event,
+      ioData: {
+        meantToBeSentTo: ["address 1", "address 2"],
+        sentTo: ["address 1", "address 2"],
+        timestamp: expect.any(Number),
+      },
+      sentFrom: "address 1",
+    });
+    expect(onEventClient1).toHaveBeenNthCalledWith(3, {
       publicKey: expect.anything(),
       sentFrom: client2Address, // received event from client 2
       type: "exchange-keys",
     });
 
     expect(onEventClient2).toHaveBeenCalledTimes(2);
-    expect(onEventClient1).toHaveBeenNthCalledWith(1, {
+    expect(onEventClient2).toHaveBeenNthCalledWith(1, {
       publicKey: expect.anything(),
       sentFrom: client1Address, // received the event from client 1
       type: "exchange-keys",
     });
-    expect(onEventClient1).toHaveBeenNthCalledWith(2, {
-      publicKey: expect.anything(),
-      sentFrom: client2Address, // sent the event to himself
-      type: "exchange-keys",
+    expect(onEventClient2).toHaveBeenNthCalledWith(2, {
+      ...event,
+      ioData: {
+        meantToBeSentTo: ["address 1", "address 2"],
+        sentTo: ["address 1", "address 2"],
+        timestamp: expect.any(Number),
+      },
+      sentFrom: "address 1",
     });
   });
 });
