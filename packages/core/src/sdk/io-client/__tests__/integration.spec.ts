@@ -46,8 +46,8 @@ describe("IO Client with E2EE", () => {
 
     await wait();
 
-    expect(onEventClient1).toHaveBeenCalledTimes(3);
-    expect(onEventClient1).toHaveBeenNthCalledWith(1, {
+    expect(onEventClient1).toHaveBeenCalledTimes(1);
+    expect(onEventClient1).toHaveBeenCalledWith({
       ...event,
       ioData: {
         meantToBeSentTo: ["address 2", "address 1"],
@@ -56,28 +56,9 @@ describe("IO Client with E2EE", () => {
       },
       sentFrom: "address 1",
     });
-    expect(onEventClient1).toHaveBeenNthCalledWith(2, {
-      ...event,
-      ioData: {
-        meantToBeSentTo: ["address 1", "address 2"],
-        sentTo: ["address 1", "address 2"],
-        timestamp: expect.any(Number),
-      },
-      sentFrom: "address 1",
-    });
-    expect(onEventClient1).toHaveBeenNthCalledWith(3, {
-      publicKey: expect.anything(),
-      sentFrom: client2Address, // received event from client 2
-      type: "exchange-keys",
-    });
 
-    expect(onEventClient2).toHaveBeenCalledTimes(2);
-    expect(onEventClient2).toHaveBeenNthCalledWith(1, {
-      publicKey: expect.anything(),
-      sentFrom: client1Address, // received the event from client 1
-      type: "exchange-keys",
-    });
-    expect(onEventClient2).toHaveBeenNthCalledWith(2, {
+    expect(onEventClient2).toHaveBeenCalledTimes(1);
+    expect(onEventClient2).toHaveBeenCalledWith({
       ...event,
       ioData: {
         meantToBeSentTo: ["address 1", "address 2"],

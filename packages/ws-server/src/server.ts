@@ -20,9 +20,7 @@ export function buildIOServer(httpServer2: HTTPServer | HTTPSServer) {
 export function buildWithHTTPServer() {
   const httpServer = createServer();
   const io = buildIOServer(httpServer);
-  const port = 9977;
-  httpServer.listen(port);
-  logger.info("Server started", { port });
+  httpServer.listen(9978);
 
   return {
     teardown: () => {
@@ -45,7 +43,7 @@ function onConnection(socket: SocketType) {
   logger.info("Client connected", { id: socket.data.walletAddress });
 
   if (!socket.data.walletAddress) {
-    logger.warn("Client connected without wallet address");
+    logger.warn("client without data.walletAddress requesting messages");
     return;
   }
 
@@ -70,8 +68,36 @@ function onEvent(socket: SocketType, messageStore: MessageStore) {
 
     socket
       .to(to)
-      //@ts-ignore
-      .emit("event", { payload, eventULID, from, acknowledged: false });
+      .timeout(5000)
+      .emit(
+        "event",
+        { payload, eventULID, from, acknowledged: false },
+        async (err: any, cbArgs: any) => {
+          // TODO: if there are no clients on the other side, this gets called with []
+          // if the client don't call the callback with the boolean true, return early
+
+          if (err || typeof cbArgs[0] !== "boolean" || !cbArgs[0]) {
+            if (err) {
+              logger.error(err);
+            }
+            return;
+          }
+          const toUpdate = await messageStore.getById(eventULID);
+
+          if (!toUpdate) {
+            logger.error("Trying to update a non-existent entry");
+          }
+
+          await messageStore.updateById(eventULID, {
+            eventULID,
+            from,
+            payload,
+            timestamp: toUpdate!.timestamp,
+            to,
+            acknowledged: true,
+          });
+        }
+      );
 
     await messageStore.save({
       to,
