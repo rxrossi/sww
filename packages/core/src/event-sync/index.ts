@@ -29,7 +29,6 @@ export class EventsSync {
   };
 
   syncGroupWith: SyncGroupWith = (groupId, address) => {
-    return;
     const events = this.deps.events.getAllByGroupId(groupId);
     const toSend = events.filter(
       ({ ioData }) => !ioData.sentTo.includes(address)
