@@ -1,5 +1,5 @@
 import { Ids } from "src/ids";
-import { EmitEvent } from "src/sdk/application/io-client/application/base-io-client";
+import { EmitEvent } from "src/sdk/io-client/types";
 import { EventType } from "./events";
 import { GroupsRepository } from "./repository";
 

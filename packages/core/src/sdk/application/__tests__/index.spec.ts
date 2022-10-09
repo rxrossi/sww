@@ -63,7 +63,7 @@ describe("Application", () => {
 
       client1.invites.invite({ groupId, address: client2WalletAddress });
 
-      await wait(2000);
+      await wait();
 
       const client1Invites = client1.invites.list();
 
@@ -86,7 +86,6 @@ describe("Application", () => {
           to: { walletAddress: client2WalletAddress },
         },
       ]);
-      return;
 
       client2.invites.accept({ inviteId: client1Invites[0].id });
 

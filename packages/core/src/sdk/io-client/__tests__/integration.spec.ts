@@ -6,7 +6,7 @@ const buildTestClient = () =>
     new WsClient({
       socketIoOptions: ["http://localhost:9977"],
     })
-  );
+  ).ioClient;
 
 const wait = () =>
   new Promise((resolve) => {

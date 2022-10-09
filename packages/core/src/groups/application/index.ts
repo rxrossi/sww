@@ -1,8 +1,5 @@
 import { Ids } from "src/ids";
-import {
-  EmitEvent,
-  EventHandler,
-} from "src/sdk/application/io-client/application/base-io-client";
+import { EmitEvent, EventHandler } from "src/sdk/io-client/types";
 import { GroupsRepositoryInMemory } from "../infra/repository-in-memory";
 import { GroupsEventHandler } from "./event-handler";
 import { Groups } from "./sdk";
@@ -13,7 +10,7 @@ export const buildSdk = ({
   ids,
 }: {
   emitEvent: EmitEvent;
-  addOnEvent: (eventHandler: EventHandler<any>) => void;
+  addOnEvent: (eventHandler: EventHandler) => void;
   ids: Ids;
 }) => {
   const repository = new GroupsRepositoryInMemory();
