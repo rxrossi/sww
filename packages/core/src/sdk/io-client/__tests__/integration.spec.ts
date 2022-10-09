@@ -1,19 +1,37 @@
+import { buildWithHTTPServer } from "@sww/ws-server";
 import { Client as WsClient } from "@sww/ws-client";
 import { build } from "..";
 
+const port = 9992;
 const buildTestClient = () =>
   build(
     new WsClient({
-      socketIoOptions: ["http://localhost:9977"],
+      socketIoOptions: [
+        `http://localhost:${port}`,
+        {
+          autoConnect: false,
+        },
+      ],
     })
   ).ioClient;
 
-const wait = () =>
+const wait = (time = 300) =>
   new Promise((resolve) => {
-    setTimeout(() => resolve(null), 300);
+    setTimeout(() => resolve(null), time);
   });
 
 describe("IO Client with E2EE", () => {
+  let server: ReturnType<typeof buildWithHTTPServer>;
+  beforeAll(async () => {
+    server = buildWithHTTPServer(port);
+    await wait(500);
+  });
+
+  afterAll(async () => {
+    server.teardown();
+    await wait();
+  });
+
   const client1Address = "address 1";
   const client2Address = "address 2";
 

@@ -5,16 +5,16 @@ import { build } from "../io-client";
 
 import { Ids } from "src/ids";
 
-export const buildSdk = () => {
+export const buildSdk = (url: string) => {
   const ids = new Ids();
 
   const { ioClient, eventsSync, whoAmI } = build(
     new WsClient({
       socketIoOptions: [
-        "http://localhost:9977",
+        url,
         {
           autoConnect: false,
-          forceNew: false,
+          //TODO: enable again and put a call to get all messages
           reconnection: false,
         },
       ],

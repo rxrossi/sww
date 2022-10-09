@@ -17,10 +17,9 @@ export function buildIOServer(httpServer2: HTTPServer | HTTPSServer) {
   return io;
 }
 
-export function buildWithHTTPServer() {
+export function buildWithHTTPServer(port: number) {
   const httpServer = createServer();
   const io = buildIOServer(httpServer);
-  const port = 9977;
   httpServer.listen(port);
   logger.info("Server started", { port });
 

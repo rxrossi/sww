@@ -1,7 +1,9 @@
 import { buildSdk } from "../";
+import { buildWithHTTPServer } from "@sww/ws-server";
 
+const port = 9991;
 const buildClient = () => {
-  return buildSdk();
+  return buildSdk(`http://localhost:${port}`);
 };
 
 const wait = (timeMs: number = 100) =>
@@ -12,6 +14,17 @@ const wait = (timeMs: number = 100) =>
   });
 
 describe("Application", () => {
+  let server: ReturnType<typeof buildWithHTTPServer>;
+  beforeAll(async () => {
+    server = buildWithHTTPServer(port);
+    await wait();
+  });
+
+  afterAll(async () => {
+    server.teardown();
+    await wait();
+  });
+
   describe("Creating a group", () => {
     const client = buildClient();
 

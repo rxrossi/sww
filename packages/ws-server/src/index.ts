@@ -1,3 +1,3 @@
 import { buildWithHTTPServer } from "./server";
 
-buildWithHTTPServer();
+buildWithHTTPServer(9977);
