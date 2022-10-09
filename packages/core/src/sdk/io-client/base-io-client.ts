@@ -28,6 +28,8 @@ export class BaseIoClient {
     this.client = client;
 
     this.client.addOnEvent(this.eventHandler);
+
+    this.client.io.on("disconnect", () => {});
   }
 
   send: BaseIoClientEmitEvent = (event: OutgoingEvent) => {
@@ -48,7 +50,11 @@ export class BaseIoClient {
 
   private eventHandler = (event: IncomingEvent): void => {
     this.eventHandlers.forEach((handler) => {
-      handler(event);
+      try {
+        handler(event);
+      } catch (e) {
+        console.log("handler failed", e);
+      }
     });
   };
 

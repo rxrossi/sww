@@ -38,8 +38,7 @@ export class Encryption {
 
   decrypt = <DecryptedMessage>(
     data: EncryptedMessage,
-    sharedKeys: SharedKeys,
-    any: any
+    sharedKeys: SharedKeys
   ): DecryptedMessage => {
     const decrypted = nacl.box.open.after(
       naclUtils.decodeBase64(data.cipherText),
@@ -52,7 +51,6 @@ export class Encryption {
         data,
         sharedKeys,
         shared: this.getSharedKey(sharedKeys),
-        any,
       });
       throw new Error("Error when decrypting the payload");
     }

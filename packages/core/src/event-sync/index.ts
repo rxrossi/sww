@@ -13,7 +13,9 @@ export class EventsSync {
   ) {}
 
   syncWithAddress: SyncWithAddress = (address) => {
+    //TODO: it is not clear that getAllByAddress will work based on meantToBeSentTo and not sentTo as well
     const events = this.deps.events.getAllByAddress(address);
+
     const toSend = events.filter(
       ({ ioData }) => !ioData.sentTo.includes(address)
     );
@@ -21,11 +23,13 @@ export class EventsSync {
     toSend.forEach((event) => {
       //TODO: the ioClient should update the sentTo
       //The event needs to be sent to everyone that had it, so they get the updated sentTo/meantToBeSentTo
-      this.deps.emitEvent(event, event.ioData.sentTo.concat(address));
+      const target = event.ioData.sentTo.concat(address);
+      this.deps.emitEvent(event, target);
     });
   };
 
   syncGroupWith: SyncGroupWith = (groupId, address) => {
+    return;
     const events = this.deps.events.getAllByGroupId(groupId);
     const toSend = events.filter(
       ({ ioData }) => !ioData.sentTo.includes(address)

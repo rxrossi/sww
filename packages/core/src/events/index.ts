@@ -65,7 +65,13 @@ export class Events {
   eventHandler: EventHandler = (event) => {
     //TODO: handle duplicated event based on ulid
 
+    const exists = this.deps.repository.getByUlid(event.ulid);
+
     this.upsertEvent(event);
+
+    if (exists) {
+      return;
+    }
 
     this.eventHandlers.forEach((eventHandler) => {
       eventHandler(event);

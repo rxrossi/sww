@@ -1,6 +1,5 @@
-import { OutgoingEvent } from "src/shared/event";
+import { isEventData, OutgoingEvent } from "src/shared/event";
 import { BaseIoClient } from "./base-io-client";
-import { Evt } from "src/shared/event";
 import { E2eeHelper } from "./e2ee-helper";
 import { isEncryptedMessage } from "./encryption";
 import { EmitEvent, EventHandler } from "./types";
@@ -20,20 +19,16 @@ type Dependencies = {
 export class IoClient {
   constructor(private deps: Dependencies) {
     this.deps.baseClient.addOnEvent((event) => {
-      const x = {
-        whoAmI: this.deps.whoAmI(),
-        from: event.from,
-        payload: event.payload,
-      };
-
-      const payload: Evt = isEncryptedMessage(event.payload)
-        ? this.deps.e2eeHelpers.decryptEvent(event.payload, event.from, x)
+      const payload = isEncryptedMessage(event.payload)
+        ? this.deps.e2eeHelpers.decryptEvent(event.payload, event.from)
         : event.payload;
 
-      this.deps.eventStore.eventHandler({
-        ...payload,
-        sentFrom: event.from,
-      });
+      if (isEventData(payload)) {
+        this.deps.eventStore.eventHandler({
+          ...payload,
+          sentFrom: event.from,
+        });
+      }
     });
   }
 

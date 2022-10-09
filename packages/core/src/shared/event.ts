@@ -29,3 +29,7 @@ export type OutgoingEvent<payload = any, type = string> = NewEventInput<
 export type Evt<payload = any, type = string> = OutgoingEvent<payload, type> & {
   sentFrom: Address;
 };
+
+export const isEventData = (input: any): input is Evt => {
+  return Boolean(input?.data?.type);
+};

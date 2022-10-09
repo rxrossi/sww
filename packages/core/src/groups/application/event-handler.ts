@@ -1,5 +1,4 @@
-import { EventHandler } from "src/sdk/application/io-client/application/base-io-client";
-import { Evt } from "src/shared/event";
+import { EventHandler } from "src/sdk/io-client/types";
 import { EventType } from "./events";
 import { GroupsRepository } from "./repository";
 
@@ -10,12 +9,12 @@ export class GroupsEventHandler {
     }
   ) {}
 
-  eventHandler: EventHandler<Evt> = (event) => {
+  eventHandler: EventHandler = (event) => {
     const newGroupEventType: EventType = "groups:new";
 
-    switch (event.payload.data.type) {
+    switch (event.data.type) {
       case newGroupEventType: {
-        this.deps.repository.create(event.payload.data.payload);
+        this.deps.repository.create(event.data.payload);
         break;
       }
     }

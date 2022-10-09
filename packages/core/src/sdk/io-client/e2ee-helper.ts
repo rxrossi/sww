@@ -17,11 +17,10 @@ export class E2eeHelper {
     );
   }
 
-  decryptEvent(message: EncryptedMessage, fromAddress: string, any: any) {
+  decryptEvent(message: EncryptedMessage, fromAddress: string) {
     return this.deps.encryption.decrypt(
       message,
-      this.getBothKeysOrThrow(fromAddress),
-      any
+      this.getBothKeysOrThrow(fromAddress)
     );
   }
 

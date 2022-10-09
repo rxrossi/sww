@@ -28,7 +28,7 @@ export const build = (wsClient: WsClient<any>) => {
       whoAmI: baseClient.whoAmI,
       syncWithAddress: (address: string) => {
         //TODO: this looks odd... maybe not?
-        eventSync.syncWithAddress(address);
+        eventsSync.syncWithAddress(address);
       },
       addOnEvent: baseClient.addOnEvent,
       emitEvent: baseClient.send,
@@ -39,10 +39,14 @@ export const build = (wsClient: WsClient<any>) => {
     keysRepository,
   });
 
-  const eventSync = new EventsSync({
+  const eventsSync = new EventsSync({
     emitEvent: ioClientE2ee.emitEvent,
     events: eventStore,
   });
 
-  return ioClientE2ee;
+  return {
+    ioClient: ioClientE2ee,
+    eventsSync: eventsSync,
+    whoAmI: baseClient.whoAmI,
+  };
 };

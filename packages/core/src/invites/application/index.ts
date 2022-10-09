@@ -1,10 +1,7 @@
 import { SyncGroupWith } from "src/event-sync";
 import { GroupsRepository } from "src/groups/application/repository";
 import { Ids } from "src/ids";
-import {
-  EmitEvent,
-  EventHandler,
-} from "src/sdk/application/io-client/application/base-io-client";
+import { EmitEvent, EventHandler } from "src/sdk/io-client/types";
 import { InvitesRepositoryInMemory } from "../infra/repository-in-memory";
 import { InvitesEventHandler } from "./event-handler";
 import { InvitesSdk } from "./sdk";
@@ -17,17 +14,21 @@ export const buildSdk = ({
   groupsRepository,
   addOnEvent,
   syncGroupWith,
+  whoAmI,
   ids,
 }: {
   emitEvent: EmitEvent;
-  addOnEvent: (eventHandler: EventHandler<any>) => void;
+  addOnEvent: (eventHandler: EventHandler) => void;
   groupsRepository: GroupsRepository;
   syncGroupWith: SyncGroupWith;
+  //TODO: can't keep hardcoding the type every time
+  whoAmI: () => string;
   ids: Ids;
 }) => {
   const invitesRepository = new InvitesRepositoryInMemory();
 
   const sdk = new InvitesSdk({
+    whoAmI,
     emitEvent,
     groupsRepository,
     invitesRepository,
@@ -35,6 +36,7 @@ export const buildSdk = ({
   });
 
   const { eventHandler } = new InvitesEventHandler({
+    whoAmI,
     invitesRepository,
     syncGroupWith,
   });

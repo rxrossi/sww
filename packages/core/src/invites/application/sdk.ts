@@ -1,6 +1,6 @@
 import { GroupsRepository } from "src/groups/application/repository";
 import { Ids } from "src/ids";
-import { EmitEvent } from "src/sdk/application/io-client/application/base-io-client";
+import { EmitEvent } from "src/sdk/io-client/types";
 import { Invite } from "../domain/invite";
 import { EventType } from "./events";
 import { InvitesRepository } from "./repository";
@@ -9,6 +9,7 @@ type Dependencies = {
   groupsRepository: GroupsRepository;
   emitEvent: EmitEvent;
   invitesRepository: InvitesRepository;
+  whoAmI: () => string;
   ids: Ids;
 };
 
@@ -34,7 +35,7 @@ export class InvitesSdk {
         name: groupName,
       },
       from: {
-        walletAddress: "address1",
+        walletAddress: this.deps.whoAmI(),
       },
       to: {
         walletAddress: address,
