@@ -1,15 +1,23 @@
-export type InviteEventRepositoryEntry = {
+import { Invite } from "../domain/invite";
+
+export type InvitesRepositoryEntry = {
   id: string;
-  to: {
+  status: Invite["status"];
+  toJoin: {
+    groupId: string;
     name: string;
+  };
+  to: {
     walletAddress: string;
   };
   from: {
-    name: string;
     walletAddress: string;
   };
-  toJoinGroup: string;
-  status: "pending" | "accepted" | "rejected";
 };
 
-export type InvitesRepository = Repository<InviteEventRepositoryEntry>;
+export interface InvitesRepository {
+  create(input: InvitesRepositoryEntry): void;
+  getById(id: string): InvitesRepositoryEntry | undefined;
+  list(): Array<InvitesRepositoryEntry>;
+  update(id: string, data: Omit<InvitesRepositoryEntry, "id">): void;
+}

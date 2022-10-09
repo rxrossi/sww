@@ -25,17 +25,14 @@ export class Client<EventPayload> {
     this.io.on("event", onEventCallback);
   }
 
-  connect({ address, signedMessage }: Auth) {
+  connect(auth: Auth) {
     // TODO:
     // The client will request the auth server for a nonce, sending his address
     // The auth server will store something like { address: nonce } and return a nonce
     // The client will sign a message with this nonce, it will be used to on the auth header { address: string, signedMessage }
     // The ws server will use auth info to request the auth server
 
-    this.io.auth = {
-      address,
-      signedMessage,
-    };
+    this.io.auth = auth;
 
     this.io.connect();
   }
@@ -43,6 +40,11 @@ export class Client<EventPayload> {
   disconnect() {
     this.io.disconnect();
   }
+
+  getAuth = (): Auth => {
+    //TODO: error if this is undefined?
+    return this.io.auth as Auth;
+  };
 
   asksForPersistedMessages() {
     this.io.emit("allMessagesSince", { timestamp: 42 });
@@ -57,7 +59,6 @@ export class Client<EventPayload> {
     to: string;
     eventULID: string;
   }) {
-    //@ts-ignore
-    this.io.emit("event", { eventULID, to, payload });
+    this.io.emit("event", { eventULID, to, payload, acknowledged: "false" });
   }
 }

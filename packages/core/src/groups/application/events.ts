@@ -1,30 +1,12 @@
-import { IOEvent } from "src/shared/application/ioClient";
+import { Evt } from "src/shared/event";
 
-export enum GroupIOEventType {
-  new = "group:new",
-  delete = "group:delete",
-}
-
-export type GroupIOEvent = CreateGroup | DeleteGroup;
-
-export type CreateGroup = {
-  ulid: string;
-  sentFrom: string;
-  payload: {
-    type: GroupIOEventType.new;
-    groupId: string;
-    name: string;
-  };
+type Group = {
+  id: string;
+  name: string;
+  description: string;
 };
 
-export type DeleteGroup = {
-  ulid: string;
-  sentFrom: string;
-  payload: {
-    type: GroupIOEventType.delete;
-  };
-};
+//TODO: no using the type for "type"
+export type NewGroupIncoming = Evt<Group, "groups:new">;
 
-export const isCreateGroupIOEvent = (event: IOEvent): event is CreateGroup => {
-  return event?.payload.type === GroupIOEventType.new;
-};
+export type EventType = "groups:new";
